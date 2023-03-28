@@ -1,44 +1,86 @@
+#include "main.h"
+
 /**
- * is_printable - Check whether a character is printable or not.
- * @c: Character to be checked.
+ * is_printable - Evaluates if a char is printable
+ * @c: Char to be evaluated.
  *
- * Return: 1 if printable, 0 otherwise.
+ * Return: 1 if c is printable, 0 otherwise
  */
 int is_printable(char c)
 {
-    return (c >= 32 && c <= 126);
+	if (c >= 32 && c < 127)
+		return (1);
+
+	return (0);
 }
 
-
 /**
- * append_hexa_code - Appends hexa code of a char to a given buffer at a given index.
- *
- * @c: The character whose hexa code you wish to append to the buffer.
- * @buffer: destination to append to.
- * @buffer_index: pointer to current index of buffer, this will be incremented for the new value.
- *
- * Return: 2 after adding hexa decimal characters..
+ * append_hexa_code - Append ascci in hexadecimal code to buffer
+ * @buffer: Array of chars.
+ * @i: Index at which to start appending.
+ * @ascii_code: ASSCI CODE.
+ * Return: Always 3
  */
-int append_hexa_code(char c, char buffer[], int buffer_index)
+int append_hexa_code(char ascii_code, char buffer[], int i)
 {
-    buffer[buffer_index] = '\';
-    buffer[buffer_index + 1] = 'x';
-    buffer[buffer_index + 2] = (c / 16) < 10 ? (c / 16) + '0' : (c / 16) - 10 + 'a';
-    buffer[buffer_index + 3] = (c % 16) < 10 ? (c % 16) + '0' : (c % 16) - 10 + 'a';
+	char map_to[] = "0123456789ABCDEF";
+	/* The hexa format code is always 2 digits long */
+	if (ascii_code < 0)
+		ascii_code *= -1;
 
-    /* incrementing by 4 because we appended 4 characters*/
-    return (4);
+	buffer[i++] = '\\';
+	buffer[i++] = 'x';
+
+	buffer[i++] = map_to[ascii_code / 16];
+	buffer[i] = map_to[ascii_code % 16];
+
+	return (3);
 }
 
 /**
- * is_digit - Checks if the given character is a digit or not.
+ * is_digit - Verifies if a char is a digit
+ * @c: Char to be evaluated
  *
- * @c: The character to be checked.
- *
- * Return: 1 if digit, 0 otherwise.
+ * Return: 1 if c is a digit, 0 otherwise
  */
-
 int is_digit(char c)
 {
-    return (c >= '0' && c <= '9');
+	if (c >= '0' && c <= '9')
+		return (1);
+
+	return (0);
+}
+
+/**
+ * convert_size_number - Casts a number to the specified size
+ * @num: Number to be casted.
+ * @size: Number indicating the type to be casted.
+ *
+ * Return: Casted value of num
+ */
+long int convert_size_number(long int num, int size)
+{
+	if (size == S_LONG)
+		return (num);
+	else if (size == S_SHORT)
+		return ((short)num);
+
+	return ((int)num);
+}
+
+/**
+ * convert_size_unsgnd - Casts a number to the specified size
+ * @num: Number to be casted
+ * @size: Number indicating the type to be casted
+ *
+ * Return: Casted value of num
+ */
+long int convert_size_unsgnd(unsigned long int num, int size)
+{
+	if (size == S_LONG)
+		return (num);
+	else if (size == S_SHORT)
+		return ((unsigned short)num);
+
+	return ((unsigned int)num);
 }

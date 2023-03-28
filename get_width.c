@@ -1,29 +1,36 @@
-/**
- * get_width - Get the specific width field of the format
- * @format: format specifier containing size sub-specifier
- * @i: pointer to pointer to current position in format
- * @list: object Holds needed by macros
- * 
- * Return: integer; size or 0 on error
-*/
+#include "main.h"
 
+/**
+ * get_width - Calculates the width for printing
+ * @format: Formatted string in which to print the arguments.
+ * @i: List of arguments to be printed.
+ * @list: list of arguments.
+ *
+ * Return: width.
+ */
 int get_width(const char *format, int *i, va_list list)
 {
-    int width = 0;
+	int curr_i;
+	int width = 0;
 
-    if (isdigit(format[*i]))
-    {
-        while (isdigit(format[*i]))
-        {
-            width = width * 10 + (format[*i] - '0');
-            *i += 1;
-        }
-    }
-    else if (format[*i] == '*')
-    {
-        width = va_arg(list, int);
-        *i += 1;
-    }
+	for (curr_i = *i + 1; format[curr_i] != '\0'; curr_i++)
+	{
+		if (is_digit(format[curr_i]))
+		{
+			width *= 10;
+			width += format[curr_i] - '0';
+		}
+		else if (format[curr_i] == '*')
+		{
+			curr_i++;
+			width = va_arg(list, int);
+			break;
+		}
+		else
+			break;
+	}
 
-    return (width);
+	*i = curr_i - 1;
+
+	return (width);
 }
